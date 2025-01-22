@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments: Event Delegation and Event Bubbling</title>
+    <style>
+        /* Event Delegation */
+        ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        margin: 5px 0;
+        padding: 5px 10px;
+        background-color: #c5adad;
+        cursor: pointer;
+      }
+      li:hover {
+        background-color: #8f4c4c;
+      }
+      .highlight {
+        background-color: pink;
+      }
+
+/* Event Bubbling */
+      #outer {
+      padding: 20px;
+      background-color: #f8d7da;
+    }
+    #middle {
+      padding: 20px;
+      background-color: #a34952;
+    }
+    #inner {
+      padding: 10px 20px;
+      background-color: #f1b0b7;
+      border: none;
+      cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+
+    <!-- Event Delegation   -->
+    <h1>Dynamic List</h1>
+  <button id="addItem">Add List Item</button>
+  <ul id="list">
+    <!-- List items dynamically added with button click-->
+  </ul>
+  <script>
+    //<ul> element
+    const list = document.getElementById('list');
+    const addItemBtn = document.getElementById('addItem');
+    let itemCount = 0;
+
+    // Event listener for the "Add Item" button
+    addItemBtn.addEventListener('click', () => {
+      itemCount++;
+      const newLIItem = document.createElement('li');
+      newLIItem.textContent = `Item ${itemCount}`;
+      list.appendChild(newLIItem); // Add the new <li> to the <ul>
+    });
+
+    // Event delegation: Attach a single event listener to the <ul> parent
+    list.addEventListener('click', (event) => {
+      // Check if the clicked element is an <li>
+      if (event.target && event.target.tagName === 'LI') {
+        // Log the item's text content
+        console.log(event.target.textContent);
+        // Toggle a "highlight" class for visual feedback
+        event.target.classList.toggle('highlight');
+      }
+    });
+  </script>
+
+
+<!-- Event Bubbling -->
+<div id="outer">
+    Outer Div
+    <section id="middle">
+      Middle Section
+      <button id="inner">Click me</button>
+    </section>
+  </div>
+
+<script>
+    // Get references to the DOM elements
+    const outer = document.getElementById('outer');
+    const middle = document.getElementById('middle');
+    const inner = document.getElementById('inner');
+
+    // Attach event listeners at each level
+    outer.addEventListener('click', (event) => {
+      console.log('Outer Div clicked!');
+      console.log('Event Phase (Outer):', event.eventPhase); // Logs the phase of event
+    });
+
+    middle.addEventListener('click', (event) => {
+      console.log('Middle Section clicked!');
+      console.log('Event Phase (Middle):', event.eventPhase); // Logs the phase of event
+    });
+
+    inner.addEventListener('click', (event) => {
+      console.log('Inner Button clicked!');
+      console.log('Event Phase (Inner):', event.eventPhase); // Logs the phase of event
+    });
+
+    /*
+     Event Phases:
+     - 1 (Capturing Phase)
+     - 2 (Target Phase)
+     - 3 (Bubbling Phase)
+    */
+  </script>
+</body>
+</html>
